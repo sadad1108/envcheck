@@ -1,0 +1,16 @@
+{
+  "name": "부서별 환경관리 점검",
+  "short_name": "환경점검",
+  "description": "부서별 환경·정리정돈 점검 현황과 점검 제출",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#12343F",
+  "theme_color": "#12343F",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
