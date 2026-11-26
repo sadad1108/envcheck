@@ -565,14 +565,20 @@ function photoPick(obj, label, rerender){
   var w=el('div'); w.appendChild(el('div','lbl',label));
   var row=el('div','pp');
   if (obj.photo && obj.photo.preview){ var im=el('img'); im.src=obj.photo.preview; im.alt=label; row.appendChild(im); }
-  var inp=el('input'); inp.type='file'; inp.accept='image/*'; inp.hidden=true;
-  var bt=el('button','btn small', obj.photo?'사진 바꾸기':'사진 찍기 / 고르기'); bt.type='button';
-  bt.addEventListener('click',function(){ inp.click(); });
-  inp.addEventListener('change',function(){
-    var f=inp.files[0]; if(!f) return; bt.disabled=true; bt.textContent='사진 준비 중…';
-    shrink(f).then(function(p){ obj.photo=p; rerender(); }).catch(function(e){ toast(e.message); bt.disabled=false; bt.textContent='사진 찍기 / 고르기'; });
-  });
-  row.appendChild(inp); row.appendChild(bt);
+  // 최근 안드로이드의 사진 선택기에는 카메라가 없어서, 촬영(capture)과 앨범을 따로 둠
+  function picker(text, useCamera){
+    var inp=el('input'); inp.type='file'; inp.accept='image/*'; inp.hidden=true;
+    if (useCamera) inp.setAttribute('capture','environment');
+    var bt=el('button','btn small', text); bt.type='button';
+    bt.addEventListener('click',function(){ inp.value=''; inp.click(); });
+    inp.addEventListener('change',function(){
+      var f=inp.files[0]; if(!f) return; bt.disabled=true; bt.textContent='사진 준비 중…';
+      shrink(f).then(function(p){ obj.photo=p; rerender(); }).catch(function(e){ toast(e.message); bt.disabled=false; bt.textContent=text; });
+    });
+    row.appendChild(inp); row.appendChild(bt);
+  }
+  picker(obj.photo ? '다시 촬영' : '사진 촬영', true);
+  picker('앨범에서 선택', false);
   if (obj.photo){ var rm=el('button','btn small ghost','삭제'); rm.type='button'; rm.addEventListener('click',function(){ obj.photo=null; rerender(); }); row.appendChild(rm); }
   w.appendChild(row); return w;
 }
